@@ -4,7 +4,6 @@ import br.com.erudio.api.StockData
 import br.com.erudio.api.StockRequest
 import br.com.erudio.api.StockResponse
 import br.com.erudio.settings.APISettings
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.client.RestTemplate
