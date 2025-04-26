@@ -9,47 +9,47 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GenerativeAIController(
-    private val chatService: ChatService,
-    private val recipeService: RecipeService,
-    private val imageService: ImageService
-) {
+class GenerativeAIController (
+        private val chatService: ChatService,
+        private val recipeService: RecipeService,
+        private val imageService: ImageService
+    ) {
 
     @GetMapping("ask-ai")
-    fun getResponse(@RequestParam prompt: String?): String? {
-        return chatService.getResponse(prompt)
+    fun askAi(prompt: String?): String? {
+        return chatService.getResponse(prompt);
     }
 
     @GetMapping("ask-ai-options")
-    fun getResponseWithOptions(@RequestParam prompt: String?): String? {
-        return chatService.getResponseWithOptions(prompt)
+    fun askAiWithOptions(prompt: String?): String? {
+        return chatService.getResponseWithOptions(prompt);
     }
 
     @GetMapping("recipe-creator")
-    fun recipeCreator(
+    fun generateRecipe(
         @RequestParam ingredients: String,
         @RequestParam(defaultValue = "any") cuisine: String,
-        @RequestParam(defaultValue = "none") dietaryRestrictions: String
-    ): String? {
+        @RequestParam(defaultValue = "none") dietaryRestrictions: String): String? {
+
         if (ingredients.isNullOrBlank()) {
-            throw IllegalArgumentException("The 'ingredients' parameter is required and cannot be empty.")
+            throw IllegalArgumentException("The 'ingredients' parameter is required and cannot be empty!")
         }
 
-        return recipeService.createRecipe(ingredients, cuisine, dietaryRestrictions)
+        return recipeService.createRecipe(ingredients, cuisine, dietaryRestrictions);
     }
 
     @GetMapping("generate-image")
-    fun generateImages(
-        @RequestParam prompt: String,
-        @RequestParam(defaultValue = "hd") quality: String,
-        @RequestParam(defaultValue = "1") n: Int,
-        @RequestParam(defaultValue = "1024") height: Int,
-        @RequestParam(defaultValue = "1024") width: Int
+    fun generateImage(
+            @RequestParam prompt: String,
+            @RequestParam(defaultValue = "hd") quality: String?,
+            @RequestParam(defaultValue = "1") n: Int?,
+            @RequestParam(defaultValue = "1024") height: Int?,
+            @RequestParam(defaultValue = "1024") width: Int?
     ): MutableList<String?> {
         val response = imageService.generateImage(prompt, quality, n, height, width)!!
         val imageUrls = response.results.stream()
-            .map { result: ImageGeneration -> result.output.url }
+            .map {result: ImageGeneration -> result.output.url}
             .toList()
-        return imageUrls
+        return imageUrls;
     }
 }
