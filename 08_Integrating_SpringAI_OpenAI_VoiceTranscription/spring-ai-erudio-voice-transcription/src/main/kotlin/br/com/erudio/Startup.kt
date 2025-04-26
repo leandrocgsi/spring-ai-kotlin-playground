@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class Startup
+class SpringAiErudioVoiceTranscriptionApplication
 
 fun main(args: Array<String>) {
-    runApplication<Startup>(*args)
+	runApplication<SpringAiErudioVoiceTranscriptionApplication>(*args)
 }

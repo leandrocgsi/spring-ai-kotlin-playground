@@ -9,30 +9,29 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
-import java.io.IOException
 
 @Service
-class TranscriptionService(@Value("\${spring.ai.openai.api-key}") apiKey: String?) {
+class TranscriptionService (
+    @Value("\${spring.ai.openai.api-key}") apiKey: String) {
+
     private val transcriptionModel: OpenAiAudioTranscriptionModel
 
     init {
         val openAiAudioApi = OpenAiAudioApi.builder()
             .apiKey(apiKey)
             .build()
-        this.transcriptionModel = OpenAiAudioTranscriptionModel(openAiAudioApi)
+        transcriptionModel = OpenAiAudioTranscriptionModel(openAiAudioApi)
     }
 
-    @Throws(IOException::class)
     fun transcribeAudio(file: MultipartFile): String? {
-        val tempFile = File.createTempFile("audio", ".mp3")
+        val tempFile = File.createTempFile("audio", "mp3")
         file.transferTo(tempFile)
 
-        val options =
-            OpenAiAudioTranscriptionOptions.builder()
-                .responseFormat(OpenAiAudioApi.TranscriptResponseFormat.TEXT)
-                .language("pt")
-                .temperature(0f)
-                .build()
+        val options = OpenAiAudioTranscriptionOptions.builder()
+            .responseFormat(OpenAiAudioApi.TranscriptResponseFormat.TEXT)
+            .language("pt")
+            .temperature(0f)
+            .build();
 
         val audioFile = FileSystemResource(tempFile)
         val transcriptionRequest = AudioTranscriptionPrompt(audioFile, options)
